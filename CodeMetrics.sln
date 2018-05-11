@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMetricsLibrary", "CodeM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMetricsLibrary.Tests", "CodeMetricsLibrary.Tests\CodeMetricsLibrary.Tests.csproj", "{D8B7B803-704F-471E-A563-AA35C114AF5E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMetricsApplication", "CodeMetricsApplication\CodeMetricsApplication.csproj", "{7863BCA1-56A6-4EDA-A058-E8445B4BA605}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D8B7B803-704F-471E-A563-AA35C114AF5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8B7B803-704F-471E-A563-AA35C114AF5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8B7B803-704F-471E-A563-AA35C114AF5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7863BCA1-56A6-4EDA-A058-E8445B4BA605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7863BCA1-56A6-4EDA-A058-E8445B4BA605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7863BCA1-56A6-4EDA-A058-E8445B4BA605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7863BCA1-56A6-4EDA-A058-E8445B4BA605}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
