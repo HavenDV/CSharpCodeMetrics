@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,11 +11,13 @@ namespace CodeMetricsLibrary
     public class DzhilbMetrics
     {
         #region Properties
-        
+
         public SyntaxTree SyntaxTree { get; }
         public SyntaxList<UsingDirectiveSyntax> Usings { get; }
         public List<ClassDeclarationSyntax> Classes { get; }
         public List<MethodDeclarationSyntax> Methods { get; }
+        public List<ForStatementSyntax> Fors { get; }
+        public List<DoStatementSyntax> Dos { get; }
         public List<VariableDeclarationSyntax> Variables { get; }
         public List<InvocationExpressionSyntax> Invokes { get; }
         public List<AssignmentExpressionSyntax> Assignments { get; }
@@ -28,6 +31,14 @@ namespace CodeMetricsLibrary
 
         public List<(string name, (int start, int end)[] lines, int count)> Lines { get; }
         public int OperatorsCount { get; }
+
+        public int ClAbsolute { get; }
+        public double Cl { get; }
+        public int LLoop { get; }
+        public int LIf { get; }
+        public int LMod { get; }
+        public double FMod { get; }
+        public double FOp { get; }
 
         #endregion
 
@@ -45,6 +56,8 @@ namespace CodeMetricsLibrary
             Invokes = GetNodes<InvocationExpressionSyntax>(Methods);
             Assignments = GetNodes<AssignmentExpressionSyntax>(Methods);
             Ifs = GetNodes<IfStatementSyntax>(Methods);
+            Fors = GetNodes<ForStatementSyntax>(Methods);
+            Dos = GetNodes<DoStatementSyntax>(Methods);
             //var compares = GetNodes<BinaryExpressionSyntax>(methods, i => 
             //    i.OperatorToken.Text == "<=" || i.OperatorToken.Text == ">=" ||
             //    i.OperatorToken.Text == "<" || i.OperatorToken.Text == ">");
@@ -93,6 +106,13 @@ namespace CodeMetricsLibrary
             {
                 OperatorsCount += line.count;
             }
+
+            LIf = Ifs.Count;
+            LMod = Methods.Count;
+            LLoop = Fors.Count + Dos.Count;
+            ClAbsolute = LIf + LLoop;
+            Cl = 1.0 * ClAbsolute / OperatorsCount;
+            FMod = Math.Pow(Invokes.Count(i => Methods.Any(j => j.Identifier.Text == i.Expression.ToString())), 4) / LMod;
         }
 
         #endregion
@@ -126,6 +146,23 @@ namespace CodeMetricsLibrary
 
         private static List<T> GetNodes<T>(IEnumerable<SyntaxNode> node, Func<T, bool> predicate) =>
             GetNodes<T>(node).Where(predicate).ToList();
+
+        private static string ToString((int start, int end)[] lines) => string.Join(", ",
+            lines.Select(i =>
+                i.start == i.end
+                    ? $"{i.start}"
+                    : $"{i.start}({i.end})"));
+
+        public string GetLinesText()
+        {
+            var builder = new StringBuilder();
+            foreach (var (name, lines, count) in Lines)
+            {
+                builder.AppendLine($"{name} | {ToString(lines)} | {count}");
+            }
+
+            return builder.ToString();
+        }
 
         #endregion
     }
